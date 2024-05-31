@@ -45,40 +45,93 @@ This data comes with several potential limitations and problems, such as underre
 
 ### Trends Over Time Chart
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
+For this chart, I chose to analyze the trend of black/white prisoner populations in specifically King County, from 1998-2018. King County seemed like the most relevant county to choose from, as it is Washington's most populated, and it is local to Seattle, making it relevant to the UW Campus. 
 
-The first chart that you will create and include will show the trend over time of your variable/topic. Think carefully about what you want to communicate to your user (you may have to find relevant trends in the dataset first!). Here are some requirements to help guide your design:
 
-- Show more than one, but fewer than ~10 trends
-  - This may mean showing the same measure for different locations or different racial groups. Think carefully about a meaningful comparison of locations (e.g., the top 10 counties in a state, top 10 states, etc.)
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- You need a legend for your different line colors and a clear legend title
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(ggplot2)
+library(dplyr)
 
-When we say "clear" or "human readable" titles and labels, that means that you should not just display the variable name.
+WA_jail_rates <- read.csv("https://github.com/melaniewalsh/Neat-Datasets/raw/main/us-prison-jail-rates-1990-WA.csv")
 
-Here's an example of how to run an R script inside an RMarkdown file:
+king_county_data <- WA_jail_rates %>% filter(county_name == "King County") 
 
-``````{r, echo = FALSE, code = readLines("chart1_example.R")}
+ggplot(king_county_data, aes(x = year)) +
+  geom_line(aes(y = black_jail_pop_rate, color = "Black Incarceration Rate"), size = 1) +
+  geom_line(aes(y = white_jail_pop_rate, color = "White Incarceration Rate"), size = 1) +
+  geom_point(aes(y = black_jail_pop_rate, color = "Black Incarceration Rate")) +
+  geom_point(aes(y = white_jail_pop_rate, color = "White Incarceration Rate")) +
+  labs(title = 'Incarceration Rates in King County (1998 - 2018)',
+       x = 'Year',
+       y = 'Incarceration Rate (per 100,000)',
+       color = 'Prisoner Population') +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  facet_wrap(~ county_name)
 ```
+
 
 ### Variable Comparison Chart
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
+For this chart, I chose to compare black incarceration rates in urban/suburban vs. rural counties, specifically in the year 2018 to avoid potential clutter. I chose these two variables specifically to see if there is any correlation between incarceration in an urban environment vs. a rural one. I also chose to combine urban + suburban as King County is listed as the only urban county, and I wanted to see insight from suburban counties such as Pierce County (county which Tacoma is in)
 
-The second chart that you will create and include will show how two different (continuous) variables are related to one another. Again, think carefully about what such a comparison means and what you want to communicate to your user (you may have to find relevant trends in the dataset first!). Here are some requirements to help guide your design:
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+# Filter data for urban counties (e.g., King County)
+urban_suburban_2018 <- WA_jail_rates %>% 
+  filter(urbanicity %in% c("urban", "suburban"),
+         year == 2018)
 
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- If you choose to add a color encoding (not required), you need a legend for your different color and a clear legend title
+# Filter data for rural counties
+rural_2018 <- WA_jail_rates %>% 
+  filter(urbanicity == "rural",
+         year == 2018)
+
+
+ggplot() +
+  geom_bar(data = urban_suburban_2018, aes(x = county_name, y = black_jail_pop_rate, fill = "Urban/Suburban"), stat = "identity", position = "dodge") +
+  geom_bar(data = rural_2018, aes(x = county_name, y = black_jail_pop_rate, fill = "Rural"), stat = "identity", position = "dodge") +
+  labs(title = 'Black Incarceration Rates in Urban/Suburban vs Rural Counties (2018)',
+       x = 'County',
+       y = 'Black Incarceration Rate (per 100,000)',
+       fill = 'Region') +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),  
+        axis.text.y = element_text(size = 10), 
+        plot.title = element_text(size = 12),  
+        legend.text = element_text(size = 10),  
+        legend.title = element_text(size = 12)) +  
+  coord_flip()
+```
+
 
 ### Map
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
+For the map chart portion, I created a heatmap of counties in Washington and their total jail population. This map gives more context, complementing the first two graphs that specifically highlight disparities in black incarceration rates, the final one provides a comprehensive narrative of the intersection between race and incarceration within the state as a whole.
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(sf)
+library(ggplot2)
 
-The last chart that you will create and include will show how a variable is distributed geographically. Again, think carefully about what such a comparison means and what you want to communicate to your user (you may have to find relevant trends in the dataset first!). Here are some requirements to help guide your design:
 
-- Your map needs a title
-- Your color scale needs a legend with a clear label
-- Use a map based coordinate system to set the aspect ratio of your map
+counties <- st_read("WA_County_Boundaries.geojson")
+
+
+
+counties <- left_join(counties, WA_jail_rates, by = c("JURISDICT_NM" = "county_name"))
+
+# Add coordinates for plotting
+counties <- counties %>%
+  mutate(x = 1, 
+         y = 1, 
+         id = as.integer(row_number()))
+
+# Plot the heatmap
+ggplot() +
+  geom_sf(data = counties, aes(fill = total_pop), color = "white") +
+  scale_fill_gradient(low = "lightblue", high = "darkblue", name = "Total Jail Population Rate") +
+  labs(title = "Total Jail Population Rates Across Washington Counties") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.caption = element_text(hjust = 0.5))
+
+```
 

@@ -5,30 +5,43 @@ output: html_document
 
 ### Introduction
 
-An introduction of the problem domain and a description of the variable(s) you are choosing to analyze (and why!)
+Incarceration rates continue to be a problematic topic in the U.S. For this assignment, I want to focus on the black prisoner population rates in Washington, compared to the white prisoner population.  
 
 ### Summary Information
 
-Write a summary paragraph of findings that includes the 5 values calculated from your summary information R script
+First, I calculated the highest black jail rate among prisoners in Washington. The highest jail rate is a rate of **31000** in **Pend Oreille County** in **1998**. I then compared this to the highest white jail rate of **865.49** in **Yakima County** in **2018**. The average jail rate among black prisoners is approx. **1868.63**, and the average jail rate among white prisoners is approx. 261.58, this is an alarming difference of over 1600. Additionally, I calculated the average rate of black prisoners in 1990 (the first year this data was collected), which is approx. **1759.7**. This is compared to 2018, the most recent year in the dataset which lead up to be approx **1052.12**.
 
-These will likely be calculated using your DPLYR skills, answering questions such as: 
-
-- What is the average value of my variable across all the counties (in the current year)?
-- Where is my variable the highest / lowest?
-- How much has my variable change over the last N years?
-
-Feel free to calculate and report values that you find relevant. Again, remember that the purpose is to think about how these measure of incarceration vary by race.
 
 ### The Dataset
 
-Who collected the data?  
-How was the data collected or generated?  
-Why was the data collected?  
-How many observations (rows) are in your data?  
-How many features (columns) are in the data?  
-What, if any, ethical questions or questions of power do you need to consider when working with this data?  
-What are possible limitations or problems with this data?   (at least 200 words)
+**Who collected the data?** 
 
+This data is collected by the Vera Institute
+
+**How was the data collected or generated?** 
+
+The data was collected using two Bureau of Justice Statistics sources: the Census of Jails and the Annual Survey of Jails. The Annual Survey of Jails, which covers approximately one-third of jails annually and includes many of the largest facilities, provides important insights into trends and variations in incarceration across the United States. The Census of Jails, which is conducted every five to eight years, provides comprehensive data on jail populations and operations.
+
+**Why was the data collected?**
+
+The data was collected with the intention of providing insight into incarceration trends and practices across the United States, which allows researchers to further understand patterns dynamics of jail populations and disparities within the criminal justice system. It is through analyzing data from sources like the Census of Jails and the Annual Survey of Jails, researchers aim to uncover patterns of incarceration, identify areas for reform, and help make informed decisions to address issues related to mass incarceration, racial disparities, and the functioning of the criminal justice system at both state and county level.
+
+**How many observations (rows) are in your data?**  
+
+1131
+
+**How many features (columns) are in the data?**  
+
+23
+
+**What, if any, ethical questions or questions of power do you need to consider when working with this data?**  
+
+Researchers need to be mindful of privacy, bias, and power relations while dealing with incarceration data to make sure their findings don't reinforce stereotypes or hurt vulnerable communities. Morally sound research must prioritize social justice in the criminal justice system by interacting with affected communities and placing a high value on accountability and transparency.
+
+
+**What are possible limitations or problems with this data?**
+
+This data comes with several potential limitations and problems, such as underreporting, poor data quality, and inconsistent data. These restrictions can result in reinforcement of stereotypes, or incorrect portayals of those in the criminal justice system. Moreover, the depth of the data may be limited by contextual factors that are not fully captured, such as systemic inequalities and variations in sentencing practices. The interpretation of trends and patterns is further complicated by the jurisdictions' selective reporting and the lag in data availability. To tackle these obstacles, consideration of data quality, transparency, and context is necessary. To ensure a more accurate and thorough depiction of incarceration and its effects on people and communities, collaboration and community engagement are crucial.
 
 ### Trends Over Time Chart
 
